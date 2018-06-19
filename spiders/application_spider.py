@@ -9,9 +9,8 @@ class ApplicationSpider(scrapy.Spider):
         start_urls = [
             'https://www.applications.lk/job-vacancies',
         ]
-        # for i in range(2, 201):
-        #     print(i)
-        #     start_urls.append('https://www.applications.lk/job-vacancies/page/'+str(i))
+        for i in range(2, 201):
+            start_urls.append('https://www.applications.lk/job-vacancies/page/'+str(i))
 
         for url in start_urls:
             yield scrapy.Request(url=url, callback=self.parse)
@@ -47,6 +46,8 @@ class ApplicationSpider(scrapy.Spider):
                                           '/p/strong/span/text()').extract_first()
             contact_numbers = response.xpath('//article/div[@class="entry-content-wrapper"]/div[@class="entry-content"]'
                                              '/p/text()').extract_first()
+            # email = response.xpath('//article/div[@class="entry-content-wrapper"]/div[@class="entry-content"]'
+            #                        '/p[contains(text(), "Email")]/text()').extract()
             source = response.xpath('//article/div[@class="entry-content-wrapper"]/div[@class="entry-content"]'
                                     '/p[contains(text(), "Source")]/text()').extract()
 
@@ -57,5 +58,6 @@ class ApplicationSpider(scrapy.Spider):
                 'author': author,
                 'closing_date': closing_date,
                 'contact_numbers': contact_numbers,
+                # 'email': email,
                 'source': source
             }
